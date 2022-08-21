@@ -5,12 +5,11 @@ import {Contacts} from './Contacts/Contacts';
 import { Filter } from "./UserFilter/Filter";
 import { nanoid } from "nanoid";
 import { useSelector,useDispatch } from "react-redux";
-import {setContacts,getContacts, getFilter} from './Redux/sliceContacts';
+import {setContacts,getContacts} from './Redux/sliceContacts';
 
 export const App=()=>{
   const dispatch=useDispatch()
   const contacts=useSelector(getContacts)
-  const onFilter=useSelector(getFilter)
   const filterId=nanoid();
 
 const formHandleSubmit=(data) => {
@@ -27,12 +26,7 @@ const formHandleSubmit=(data) => {
   }
 }
 
-const getContactsFiltered=()=>{
-  const normalizedFilterName=onFilter.toLowerCase()
-  return contacts.filter(el=> el.name.toLowerCase().includes(normalizedFilterName))
-}
-  
-  const contactsList = getContactsFiltered();
+
 
     return (<PhonebookApp>
       <HeaderApp>Phonebook</HeaderApp>
@@ -44,8 +38,6 @@ const getContactsFiltered=()=>{
       title='Find contacts by name'
       id={filterId}
       />
-      <Contacts 
-      contactsList={contactsList}
-      />
+      <Contacts/>
     </PhonebookApp>)
   }
