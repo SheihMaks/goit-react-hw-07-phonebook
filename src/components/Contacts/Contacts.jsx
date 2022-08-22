@@ -7,12 +7,13 @@ export const Contacts=()=>{
     const dispatch=useDispatch();
     const onFilter=useSelector(getFilter)
     const contacts=useSelector(getContacts)
+    
     const getContactsFiltered=()=>{
         const normalizedFilterName=onFilter.toLowerCase()
         return contacts.filter(el=> el.name.toLowerCase().includes(normalizedFilterName))
         }
         
-        const contactsList = getContactsFiltered();
+    const contactsList = getContactsFiltered();
 
     return (<ContactsList>
         {contactsList.map((contact)=>{
