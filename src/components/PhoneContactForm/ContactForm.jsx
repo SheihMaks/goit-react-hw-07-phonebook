@@ -1,11 +1,28 @@
-import {useState} from "react"
+import {useState} from "react";
+import PropTypes from 'prop-types'
 import { nanoid } from "nanoid";
+import {useAddContactsMutation} from 'components/Redux/fetchContacts';
 import { ContactFormContainer,Button,Form,LabelOfInputName,Input, LabelOfInputPhone } from "./ContactForm.styled";
-export const ContactForm =({onSubmit})=>{
+
+export const ContactForm =({contactsList})=>{
   const [name,setName]=useState('');
   const [number,setNumber]=useState('');
-const inputNameId=nanoid();
-const inputNumberId=nanoid();
+  const inputNameId=nanoid();
+  const inputNumberId=nanoid();
+
+  const [addContacts]=useAddContactsMutation();
+
+  const formHandleSubmit=(data) => {
+    data={
+      name:data.name,
+      number:data.number,
+      id:nanoid()
+    } 
+
+  if (contactsList.find(el=>el.name===data.name)){
+    window.alert(`${data.name} is already in contacts`) } 
+    else{addContacts(data)}
+  }
 
 const onHandleInput=(e)=>{
   const {name,value}=e.currentTarget
@@ -19,7 +36,7 @@ const onHandleInput=(e)=>{
   
   const onHandleSubmit=(e)=>{
     e.preventDefault()
-    onSubmit({name,number})
+    formHandleSubmit({name,number})
   reset()
   }
 
@@ -51,5 +68,8 @@ return(<ContactFormContainer><Form onSubmit={onHandleSubmit}><LabelOfInputName h
   required
 />
 <Button type='submit'>Add contact</Button></Form></ContactFormContainer>)
-    
+}
+
+ContactForm.propTypes={
+  contactsList:PropTypes.array,
 }
