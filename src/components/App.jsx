@@ -4,13 +4,12 @@ import { ContactForm } from "./PhoneContactForm/ContactForm";
 import {Contacts} from './Contacts/Contacts';
 import { Filter } from "./UserFilter/Filter";
 import { nanoid } from "nanoid";
-import { useSelector,useDispatch } from "react-redux";
-import {setContacts,getContacts} from './Redux/sliceContacts';
+import {useGetContactsQuery,useAddContactsMutation} from './Redux/fetchContacts'
 
 export const App=()=>{
-  const dispatch=useDispatch()
-  const contacts=useSelector(getContacts)
   const filterId=nanoid();
+  const {data:contacts}=useGetContactsQuery();
+  const [addContacts]=useAddContactsMutation();
 
 const formHandleSubmit=(data) => {
   data={
@@ -18,17 +17,13 @@ const formHandleSubmit=(data) => {
     number:data.number,
     id:nanoid()
   }
+
   if (contacts.find(el=>el.name===data.name)){
   window.alert(`${data.name} is already in contacts`) } 
-  else{ 
- const myContacts=()=>dispatch(setContacts(data))
- myContacts()
-  }
+  else{addContacts(data)}
 }
 
-
-
-    return (<PhonebookApp>
+return (<PhonebookApp>
       <HeaderApp>Phonebook</HeaderApp>
       <ContactForm 
       onSubmit={formHandleSubmit}
